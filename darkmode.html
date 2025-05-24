@@ -1,87 +1,84 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>色反転機能</title>
-  <style>
-    html, body {
-      margin: 0; height: 100%;
-    }
+<link rel="stylesheet" href="https://yuyuyu-made-bbs.glitch.me/style.css">
 
-    #toggleBtn {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      width: 50px; height: 50px;
-      border-radius: 50%;
-      border: none;
-      cursor: pointer;
-      z-index: 1001;
-      background-color: black;
-      transition: background-color 0.3s;
-    }
+<button id="toggleBtn" class="black"></button><!--！！背景色が設定されてないと反転しないよ！！-->
 
-    #toggleBtn.white {
-      background-color: white;
-      border: 2px solid black;
-    }
+<style>
+  html, body {
+    margin: 0; height: 100%;
+    /* overflowは自動でスクロールできるように */
+  }
 
-    #overlay {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      background: white;
-      mix-blend-mode: difference;
-      clip-path: circle(0 at 100% 100%);
-      transition: clip-path 0.7s ease;
-      z-index: 1000;
-    }
-  </style>
-</head>
-<body>
-  <button id="toggleBtn" class="black"></button>
-  <div id="overlay"></div>
+  #toggleBtn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 50px; height: 50px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    z-index: 1001;
+    background-color: black;
+    transition: background-color 0.3s;
+  }
 
-  <script>
-    // ページ読み込み時にCookieを確認して状態を設定
-    window.addEventListener('DOMContentLoaded', () => {
-      const darkModeCookie = document.cookie.split("; ").find(row => row.startsWith("darkmode="));
-      if (darkModeCookie) {
-        const darkModeValue = darkModeCookie.split("=")[1];
-        if (darkModeValue === "true") {
-          enableDarkMode();
-        }
-      }
-    });
+  #toggleBtn.white {
+    background-color: white;
+    border: 2px solid black;
+  }
 
-    const btn = document.getElementById('toggleBtn');
-    const overlay = document.getElementById('overlay');
-    let inverted = false;
+  #overlay {
+    position: fixed;
+    inset: 0;
+    pointer-events: none; /* これでクリックイベントはoverlayに通らない */
+    background: white;
+    mix-blend-mode: difference;
+    clip-path: circle(0 at 100% 100%);
+    transition: clip-path 0.7s ease;
+    z-index: 1000;
+  }
+</style>
 
-    const enableDarkMode = () => {
-      overlay.style.clipPath = 'circle(150% at 100% 100%)';
-      btn.classList.add('white');
-      btn.classList.remove('black');
-      inverted = true;
-      document.cookie = "darkmode=true; path=/";
-    };
+<div id="overlay"></div>
 
-    const disableDarkMode = () => {
-      overlay.style.clipPath = 'circle(0 at 100% 100%)';
-      btn.classList.add('black');
-      btn.classList.remove('white');
-      inverted = false;
-      document.cookie = "darkmode=false; path=/";
-    };
-
-    btn.addEventListener('click', () => {
-      if (!inverted) {
+<script>
+  // ページ読み込み時にCookieを確認して状態を設定
+  window.addEventListener('DOMContentLoaded', () => {
+    const darkModeCookie = document.cookie.split("; ").find(row => row.startsWith("darkmode="));
+    if (darkModeCookie) {
+      const darkModeValue = darkModeCookie.split("=")[1];
+      if (darkModeValue === "true") {
         enableDarkMode();
       } else {
         disableDarkMode();
       }
-    });
-  </script>
-</body>
-</html>
+    }
+  });
+
+  const btn = document.getElementById('toggleBtn');
+  const overlay = document.getElementById('overlay');
+  let inverted = false;
+
+  const enableDarkMode = () => {
+    overlay.style.clipPath = 'circle(150% at 100% 100%)';
+    btn.classList.add('white');
+    btn.classList.remove('black');
+    inverted = true;
+    document.cookie = "darkmode=true; path=/";
+  };
+
+  const disableDarkMode = () => {
+    overlay.style.clipPath = 'circle(0 at 100% 100%)';
+    btn.classList.add('black');
+    btn.classList.remove('white');
+    inverted = false;
+    document.cookie = "darkmode=false; path=/";
+  };
+
+  btn.addEventListener('click', () => {
+    if (!inverted) {
+      enableDarkMode();
+    } else {
+      disableDarkMode();
+    }
+  });
+</script>
